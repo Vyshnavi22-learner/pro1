@@ -1,0 +1,102 @@
+import { useState } from "react";
+import { SideBar } from "../components/shared";
+
+function AdminCoursesPage({ courses, navigate }) {
+  const [statuses, setStatuses] = useState(() => Object.fromEntries(courses.map((c, i) => [c.id, ["PENDING", "APPROVED", "PENDING", "REJECTED", "PENDING", "APPROVED"][i] || "PENDING"])));
+  const [filter, setFilter] = useState("PENDING");
+  const [acting, setActing] = useState(null);
+  const [toast, setToast] = useState(null);
+
+  const showToast = (msg, type) => { setToast({ msg, type }); setTimeout(() => setToast(null), 3000); };
+
+  const handleAction = async (id, action) => {
+    setActing(id + action);
+    await new Promise(r => setTimeout(r, 700));
+    setStatuses(p => ({ ...p, [id]: action === "approve" ? "APPROVED" : "REJECTED" }));
+    showToast(`Course ${action === "approve" ? "approved ✓" : "rejected"}`, action === "approve" ? "success" : "error");
+    setActing(null);
+  };
+
+  const enriched = courses.map(c => ({ ...c, status: statuses[c.id] }));
+  const filtered = filter === "ALL" ? enriched : enriched.filter(c => c.status === filter);
+  const counts = { ALL: enriched.length, PENDING: enriched.filter(c => c.status === "PENDING").length, APPROVED: enriched.filter(c => c.status === "APPROVED").length, REJECTED: enriched.filter(c => c.status === "REJECTED").length };
+  const STATUS = { PENDING: { bg: "#fffbeb", text: "#b45309", dot: "#f59e0b", label: "Pending" }, APPROVED: { bg: "#f0fdf4", text: "#15803d", dot: "#22c55e", label: "Approved" }, REJECTED: { bg: "#fef2f2", text: "#b91c1c", dot: "#ef4444", label: "Rejected" } };
+
+  return (
+    <div style={{ display: "flex", minHeight: "100vh", paddingTop: 68, position: "relative" }}>
+      {toast && <div style={{ position: "fixed", top: 20, right: 20, background: toast.type === "error" ? "#c53030" : "#15803d", color: "#fff", padding: "14px 22px", borderRadius: 12, fontWeight: 600, fontSize: 14, zIndex: 1000, boxShadow: "0 8px 24px rgba(0,0,0,0.2)" }}>{toast.msg}</div>}
+      <SideBar user={{ role: "ADMIN", name: "Admin" }} active="/admin/courses" navigate={navigate} />
+      <div style={{ flex: 1, padding: "40px 40px" }}>
+        <h1 style={{ fontSize: 30, fontWeight: 800, color: "#1a1a2e", marginBottom: 6, letterSpacing: "-0.5px" }}>Course Approval Panel</h1>
+        <p style={{ color: "#94a3b8", fontSize: 15, marginBottom: 32 }}>Review instructor submissions and approve or reject.</p>
+
+        <div style={{ display: "flex", gap: 14, marginBottom: 32, flexWrap: "wrap" }}>
+          {["PENDING", "APPROVED", "REJECTED", "ALL"].map(f => {
+            const colors = { PENDING: "#f59e0b", APPROVED: "#22c55e", REJECTED: "#ef4444", ALL: "#6C63FF" };
+            return (
+              <button key={f} onClick={() => setFilter(f)}
+                style={{ flex: "1 1 120px", padding: "18px 20px", borderRadius: 14, cursor: "pointer", border: `2px solid ${filter === f ? colors[f] : "#e2e8f0"}`, background: filter === f ? colors[f] + "12" : "#fff", transition: "all 0.15s", textAlign: "left" }}>
+                <div style={{ fontSize: 28, fontWeight: 800, color: colors[f] }}>{counts[f]}</div>
+                <div style={{ fontSize: 12, color: "#718096", marginTop: 4 }}>{f === "ALL" ? "All Courses" : STATUS[f].label}</div>
+              </button>
+            );
+          })}
+        </div>
+
+        <div style={{ display: "flex", gap: 10, marginBottom: 24 }}>
+          {["PENDING", "APPROVED", "REJECTED", "ALL"].map(f => (
+            <button key={f} onClick={() => setFilter(f)}
+              style={{ padding: "8px 18px", borderRadius: 100, border: `1.5px solid ${filter === f ? "#6C63FF" : "#e2e8f0"}`, background: filter === f ? "#6C63FF" : "#fff", color: filter === f ? "#fff" : "#718096", fontSize: 13, fontWeight: filter === f ? 700 : 500, cursor: "pointer", transition: "all 0.2s" }}>
+              {f === "ALL" ? "All" : STATUS[f].label}
+            </button>
+          ))}
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {filtered.map(course => {
+            const cfg = STATUS[course.status];
+            const isPending = course.status === "PENDING";
+            return (
+              <div key={course.id} style={{ background: "#fff", borderRadius: 18, boxShadow: "0 2px 12px rgba(0,0,0,0.05)" }}>
+                <div style={{ display: "flex", alignItems: "center", padding: "20px 24px", gap: 18 }}>
+                  <div style={{ width: 56, height: 56, borderRadius: 14, background: course.coverColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 26, flexShrink: 0 }}>{course.emoji}</div>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 6, flexWrap: "wrap" }}>
+                      <h3 style={{ fontSize: 16, fontWeight: 700, color: "#1a1a2e" }}>{course.title}</h3>
+                      <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "4px 12px", borderRadius: 100, background: cfg.bg, color: cfg.text, fontSize: 12, fontWeight: 600 }}>
+                        <span style={{ width: 6, height: 6, borderRadius: "50%", background: cfg.dot, display: "inline-block" }} />
+                        {cfg.label}
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", gap: 14, fontSize: 13, color: "#94a3b8", marginBottom: 8 }}>
+                      <span>🏷️ {course.category}</span><span>👨‍🏫 {course.instructorName}</span><span>📖 {course.lessonCount} lessons</span>
+                    </div>
+                    <p style={{ fontSize: 14, color: "#64748b", lineHeight: 1.6 }}>{course.description.substring(0, 120)}…</p>
+                  </div>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 10, flexShrink: 0 }}>
+                    {isPending ? (
+                      <>
+                        <button onClick={() => handleAction(course.id, "approve")} disabled={!!acting}
+                          style={{ padding: "10px 22px", background: acting === course.id + "approve" ? "#e2e8f0" : "#f0fdf4", color: acting === course.id + "approve" ? "#94a3b8" : "#15803d", border: `1.5px solid ${acting === course.id + "approve" ? "#e2e8f0" : "#bbf7d0"}`, borderRadius: 10, fontWeight: 700, cursor: acting ? "not-allowed" : "pointer", fontSize: 14, transition: "all 0.2s" }}>
+                          {acting === course.id + "approve" ? "…" : "✓ Approve"}
+                        </button>
+                        <button onClick={() => handleAction(course.id, "reject")} disabled={!!acting}
+                          style={{ padding: "10px 22px", background: acting === course.id + "reject" ? "#e2e8f0" : "#fff5f5", color: acting === course.id + "reject" ? "#94a3b8" : "#c53030", border: `1.5px solid ${acting === course.id + "reject" ? "#e2e8f0" : "#feb2b2"}`, borderRadius: 10, fontWeight: 700, cursor: acting ? "not-allowed" : "pointer", fontSize: 14, transition: "all 0.2s" }}>
+                          {acting === course.id + "reject" ? "…" : "✕ Reject"}
+                        </button>
+                      </>
+                    ) : (
+                      <span style={{ fontSize: 13, color: "#94a3b8", fontWeight: 500 }}>{course.status === "APPROVED" ? "✅ Live" : "❌ Rejected"}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AdminCoursesPage;
