@@ -1,0 +1,161 @@
+import { useState, useEffect } from "react";
+import { SideBar } from "../components/shared";
+import { MOCK_COURSES } from "../data/mockData";
+
+function AddLessonPage({ courseId, lessons, onAddLesson, navigate }) {
+  const course = MOCK_COURSES.find(c => c.id === courseId);
+  const [form, setForm] = useState({ title: "", content: "", duration: "", orderNumber: "" });
+  const [saving, setSaving] = useState(false);
+  const [lastSaved, setLastSaved] = useState(null);
+  const [error, setError] = useState("");
+  const update = f => e => setForm(p => ({ ...p, [f]: e.target.value }));
+
+  // Keep orderNumber in sync with lesson count
+  useEffect(() => {
+    setForm(p => ({ ...p, orderNumber: String(lessons.length + 1) }));
+  }, [lessons.length]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError("");
+    if (!form.title.trim() || !form.content.trim()) { setError("Title and content are required."); return; }
+    if (!form.orderNumber || Number(form.orderNumber) < 1) { setError("Order number must be at least 1."); return; }
+    setSaving(true);
+    await new Promise(r => setTimeout(r, 600));
+    onAddLesson(courseId, {
+      title: form.title.trim(),
+      content: form.content.trim(),
+      duration: form.duration.trim() || null,
+      orderNumber: Number(form.orderNumber),
+    });
+    setLastSaved(form.title.trim());
+    setForm({ title: "", content: "", duration: "", orderNumber: String(lessons.length + 2) });
+    setSaving(false);
+  };
+
+  if (!course) return <div style={{ padding: "120px 28px", textAlign: "center", color: "#94a3b8" }}>Course not found.</div>;
+
+  return (
+    <div style={{ paddingTop: 68, minHeight: "100vh", background: "#f8f9fe", fontFamily: "'Sora',sans-serif" }}>
+      {/* Top bar */}
+      <div style={{ background: "#fff", borderBottom: "1px solid #e8ecf4", padding: "16px 36px", display: "flex", alignItems: "center", gap: 16 }}>
+        <button onClick={() => navigate("/instructor/dashboard")} style={{ background: "none", border: "none", color: "#6C63FF", fontWeight: 700, fontSize: 14, cursor: "pointer" }}>← Dashboard</button>
+        <span style={{ color: "#cbd5e0" }}>|</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 36, height: 36, borderRadius: 10, background: course.coverColor, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18 }}>{course.emoji}</div>
+          <div>
+            <div style={{ fontSize: 14, fontWeight: 700, color: "#1a1a2e" }}>{course.title}</div>
+            <div style={{ fontSize: 12, color: "#94a3b8" }}>{lessons.length} lesson{lessons.length !== 1 ? "s" : ""} added</div>
+          </div>
+        </div>
+        <div style={{ marginLeft: "auto" }}>
+          <span style={{ fontSize: 13, background: "#f0efff", color: "#6C63FF", padding: "5px 14px", borderRadius: 100, fontWeight: 600 }}>Adding Lessons</span>
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 28px", display: "flex", gap: 32, alignItems: "flex-start" }}>
+        {/* Form */}
+        <div style={{ flex: 1 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: "36px 36px", boxShadow: "0 4px 24px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+            <h2 style={{ fontSize: 22, fontWeight: 800, color: "#1a1a2e", marginBottom: 6, letterSpacing: "-0.3px" }}>Add New Lesson</h2>
+            <p style={{ color: "#94a3b8", fontSize: 14, marginBottom: 28 }}>Fill in the lesson details. It will appear instantly in the course outline.</p>
+
+            {lastSaved && (
+              <div style={{ display: "flex", alignItems: "center", gap: 10, background: "#f0fdf4", border: "1.5px solid #bbf7d0", borderRadius: 12, padding: "12px 16px", marginBottom: 24 }}>
+                <span style={{ fontSize: 18 }}>✅</span>
+                <div>
+                  <div style={{ fontWeight: 700, color: "#15803d", fontSize: 14 }}>"{lastSaved}" added!</div>
+                  <div style={{ color: "#4ade80", fontSize: 12 }}>Lesson {lessons.length} is live in the course outline →</div>
+                </div>
+              </div>
+            )}
+
+            {error && <div style={{ background: "#fff5f5", border: "1px solid #feb2b2", color: "#c53030", borderRadius: 10, padding: "11px 16px", fontSize: 14, marginBottom: 20 }}>{error}</div>}
+
+            <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+              {/* Title + Order row */}
+              <div style={{ display: "flex", gap: 16 }}>
+                <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label style={{ fontSize: 13, fontWeight: 700, color: "#4a5568" }}>Lesson Title <span style={{ color: "#f56565" }}>*</span></label>
+                  <input value={form.title} onChange={update("title")} placeholder="e.g. Introduction to Variables" maxLength={120}
+                    style={{ padding: "13px 16px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 15, color: "#1a1a2e", background: "#fafafa", transition: "all 0.2s" }} />
+                </div>
+                <div style={{ width: 130, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label style={{ fontSize: 13, fontWeight: 700, color: "#4a5568" }}>Order #</label>
+                  <input type="number" value={form.orderNumber} onChange={update("orderNumber")} min="1"
+                    style={{ padding: "13px 16px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 15, color: "#1a1a2e", background: "#fafafa" }} />
+                </div>
+                <div style={{ width: 130, display: "flex", flexDirection: "column", gap: 8 }}>
+                  <label style={{ fontSize: 13, fontWeight: 700, color: "#4a5568" }}>Duration</label>
+                  <input value={form.duration} onChange={update("duration")} placeholder="e.g. 15 min"
+                    style={{ padding: "13px 16px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 15, color: "#1a1a2e", background: "#fafafa" }} />
+                </div>
+              </div>
+
+              {/* Content */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <label style={{ fontSize: 13, fontWeight: 700, color: "#4a5568" }}>Lesson Content <span style={{ color: "#f56565" }}>*</span></label>
+                <textarea value={form.content} onChange={update("content")} rows={10} maxLength={5000}
+                  placeholder="Write the full lesson content here. Include explanations, code examples, step-by-step instructions, key takeaways…"
+                  style={{ padding: "14px 16px", borderRadius: 10, border: "1.5px solid #e2e8f0", fontSize: 15, color: "#1a1a2e", background: "#fafafa", resize: "vertical", fontFamily: "inherit", lineHeight: 1.7, transition: "all 0.2s" }} />
+                <div style={{ textAlign: "right", fontSize: 12, color: "#94a3b8" }}>{form.content.length}/5000</div>
+              </div>
+
+              <div style={{ display: "flex", gap: 12 }}>
+                <button type="submit" disabled={saving}
+                  style={{ flex: 1, padding: "15px", background: saving ? "#c4c4f0" : "linear-gradient(135deg,#6C63FF,#4f46e5)", color: "#fff", border: "none", borderRadius: 12, fontSize: 15, fontWeight: 700, cursor: saving ? "not-allowed" : "pointer", boxShadow: saving ? "none" : "0 4px 14px rgba(108,99,255,0.3)", transition: "all 0.2s" }}>
+                  {saving ? "Saving…" : `+ Add Lesson ${lessons.length + 1}`}
+                </button>
+                <button type="button" onClick={() => navigate("/instructor/dashboard")}
+                  style={{ padding: "15px 24px", background: "#f8f9fe", color: "#718096", border: "1.5px solid #e2e8f0", borderRadius: 12, fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+                  Done
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        {/* Outline sidebar */}
+        <div style={{ width: 340, position: "sticky", top: 100 }}>
+          <div style={{ background: "#fff", borderRadius: 20, padding: "28px", boxShadow: "0 4px 24px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <h3 style={{ fontSize: 16, fontWeight: 800, color: "#1a1a2e" }}>Course Outline</h3>
+              <span style={{ background: "#f0efff", color: "#6C63FF", fontSize: 13, fontWeight: 700, padding: "4px 12px", borderRadius: 100 }}>{lessons.length}</span>
+            </div>
+
+            {lessons.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "32px 0" }}>
+                <div style={{ fontSize: 36, marginBottom: 10 }}>📋</div>
+                <p style={{ color: "#94a3b8", fontSize: 14 }}>No lessons yet.<br />Add your first one!</p>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 0, maxHeight: 420, overflowY: "auto" }}>
+                {[...lessons].sort((a, b) => a.orderNumber - b.orderNumber).map((l, i) => (
+                  <div key={l.id} style={{ display: "flex", gap: 12, alignItems: "flex-start", padding: "12px 0", borderBottom: i < lessons.length - 1 ? "1px solid #f0f4f8" : "none" }}>
+                    <div style={{ width: 26, height: 26, borderRadius: "50%", background: "#6C63FF", color: "#fff", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, fontWeight: 700, flexShrink: 0, marginTop: 1 }}>{l.orderNumber}</div>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 13, fontWeight: 600, color: "#1a1a2e", marginBottom: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{l.title}</div>
+                      <div style={{ fontSize: 12, color: "#94a3b8" }}>
+                        {l.duration && `⏱ ${l.duration} · `}
+                        {l.content.length > 40 ? l.content.substring(0, 40) + "…" : l.content}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {lessons.length > 0 && (
+              <button onClick={() => navigate("/instructor/dashboard")}
+                style={{ display: "block", width: "100%", textAlign: "center", marginTop: 18, padding: "12px", background: "linear-gradient(135deg,#6C63FF,#4f46e5)", color: "#fff", border: "none", borderRadius: 10, fontWeight: 700, fontSize: 14, cursor: "pointer" }}>
+                ✓ Finish & Go to Dashboard
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default AddLessonPage;
