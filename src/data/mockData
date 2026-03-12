@@ -1,0 +1,39 @@
+export const MOCK_COURSES = [
+  { id: 1, title: "Complete Python Bootcamp", description: "Go from zero to hero in Python. Learn variables, functions, OOP, file I/O, and build 5 real projects.", category: "Programming", level: "Beginner", lessonCount: 42, enrolledCount: 3241, instructorName: "Dr. Sarah Chen", emoji: "🐍", coverColor: "linear-gradient(135deg,#3b82f6,#1d4ed8)", rating: 4.9 },
+  { id: 2, title: "UI/UX Design Masterclass", description: "Learn Figma from scratch, design systems, user research, and ship beautiful products people love.", category: "Design", level: "Intermediate", lessonCount: 38, enrolledCount: 2187, instructorName: "Marco Vitelli", emoji: "🎨", coverColor: "linear-gradient(135deg,#ec4899,#9333ea)", rating: 4.8 },
+  { id: 3, title: "Data Science with Pandas", description: "Master data wrangling, visualization, and machine learning pipelines using Python's most powerful library.", category: "Data Science", level: "Intermediate", lessonCount: 55, enrolledCount: 1890, instructorName: "Prof. Aiko Tanaka", emoji: "📊", coverColor: "linear-gradient(135deg,#10b981,#059669)", rating: 4.7 },
+  { id: 4, title: "React & Next.js Complete Guide", description: "Build full-stack web apps with React hooks, context, server components, and deploy to production.", category: "Programming", level: "Advanced", lessonCount: 61, enrolledCount: 4102, instructorName: "James O'Brien", emoji: "⚛️", coverColor: "linear-gradient(135deg,#06b6d4,#0284c7)", rating: 5.0 },
+  { id: 5, title: "Digital Marketing Fundamentals", description: "SEO, social media strategy, paid ads, email funnels — everything you need to grow any business online.", category: "Marketing", level: "Beginner", lessonCount: 29, enrolledCount: 1560, instructorName: "Priya Nair", emoji: "📱", coverColor: "linear-gradient(135deg,#f59e0b,#d97706)", rating: 4.6 },
+  { id: 6, title: "Music Theory for Producers", description: "Understand scales, chords, rhythm, and harmony so you can write and produce music that moves people.", category: "Music", level: "Beginner", lessonCount: 33, enrolledCount: 987, instructorName: "Leon Baptiste", emoji: "🎵", coverColor: "linear-gradient(135deg,#8b5cf6,#7c3aed)", rating: 4.8 },
+];
+
+export const CATEGORIES = ["All", "Programming", "Design", "Business", "Marketing", "Data Science", "Music"];
+
+export const STATS = [
+  { num: "48K+", label: "Active Students", icon: "👩‍🎓" },
+  { num: "1.2K+", label: "Expert Instructors", icon: "🏫" },
+  { num: "12K+", label: "Courses Available", icon: "📚" },
+  { num: "94%", label: "Completion Rate", icon: "🏆" },
+];
+
+export const TESTIMONIALS = [
+  { name: "Aisha Patel", role: "Frontend Dev @ Stripe", text: "LearnHub completely changed my career. I went from marketing to frontend in 8 months using courses here.", avatar: "A", color: "#6C63FF" },
+  { name: "Tom Eriksson", role: "Data Analyst @ Spotify", text: "The Data Science courses are genuinely world-class. Better than anything I found on other platforms.", avatar: "T", color: "#10b981" },
+  { name: "Nina Okonkwo", role: "UX Lead @ Figma", text: "Marco's Design Masterclass is the reason I got my job. The projects in the course built my whole portfolio.", avatar: "N", color: "#ec4899" },
+];
+
+export const SEED_LESSONS = {
+  1: [
+    { id: 101, title: "Introduction & Environment Setup", content: "In this lesson we install Python 3.12, set up VS Code with the Python extension, and run our first script. We'll cover the REPL, print statements, and basic variable assignment.", orderNumber: 1, duration: "12 min" },
+    { id: 102, title: "Variables, Data Types & Operators", content: "Python's built-in types: int, float, str, bool, and None. Learn arithmetic, comparison, and logical operators. We'll also cover type conversion and f-strings.", orderNumber: 2, duration: "18 min" },
+    { id: 103, title: "Control Flow: if / elif / else", content: "Writing conditional logic in Python. Understand truthy/falsy values, nested conditions, and the ternary expression.", orderNumber: 3, duration: "15 min" },
+    { id: 104, title: "Loops: for & while", content: "Iterating with for loops over lists, ranges, and strings. while loops with break and continue.", orderNumber: 4, duration: "20 min" },
+    { id: 105, title: "Functions & Scope", content: "Defining reusable functions with def, positional vs keyword arguments, default values, *args and **kwargs.", orderNumber: 5, duration: "22 min" },
+  ],
+  4: [
+    { id: 401, title: "React Fundamentals Review", content: "A fast recap of JSX, components, props, and state. We'll refactor a class component to hooks.", orderNumber: 1, duration: "16 min" },
+    { id: 402, title: "useState & useEffect Deep Dive", content: "Understanding the rules of hooks. Dependency arrays, cleanup functions, and common pitfalls.", orderNumber: 2, duration: "24 min" },
+    { id: 403, title: "Context API & useReducer", content: "Lifting state out of prop-drilling hell. Create a global theme and auth context.", orderNumber: 3, duration: "28 min" },
+    { id: 404, title: "Next.js 14 App Router", content: "File-based routing with the new App Router, Server vs Client Components, layouts, loading.tsx, and error.tsx.", orderNumber: 4, duration: "32 min" },
+  ],
+};
