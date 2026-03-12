@@ -1,0 +1,134 @@
+import { PageFooter } from "../components/shared";
+
+function AboutPage({ navigate }) {
+  const team = [
+    { name: "Dr. Sarah Chen", role: "Co-founder & CEO", bio: "Former Stanford CS professor with 15 years in edtech. Believes every person deserves world-class education.", emoji: "👩‍💻", color: "linear-gradient(135deg,#6C63FF,#4f46e5)" },
+    { name: "Marco Vitelli", role: "Co-founder & CPO", bio: "Ex-Figma design lead. Built products used by 10M+ people. Obsessed with making learning feel effortless.", emoji: "🎨", color: "linear-gradient(135deg,#ec4899,#9333ea)" },
+    { name: "James O'Brien", role: "CTO", bio: "Previously at Google Brain. Built the recommendation engine that matches 48K students to their perfect courses.", emoji: "⚛️", color: "linear-gradient(135deg,#06b6d4,#0284c7)" },
+    { name: "Priya Nair", role: "Head of Content", bio: "Curriculum designer who spent 8 years at Coursera. Personally reviews every course before it goes live.", emoji: "📚", color: "linear-gradient(135deg,#f59e0b,#d97706)" },
+  ];
+
+  const milestones = [
+    { year: "2019", title: "LearnHub founded", desc: "Started with 12 courses and a dream to democratize quality education." },
+    { year: "2020", title: "10,000 students", desc: "Reached our first major milestone during a global shift to remote learning." },
+    { year: "2022", title: "Series A — $18M", desc: "Raised funding to expand our instructor network and build mobile apps." },
+    { year: "2023", title: "1,000 instructors", desc: "Our expert community crossed 1,000 verified instructors across 40 countries." },
+    { year: "2024", title: "48,000+ students", desc: "Now serving learners in 120+ countries with 12,000+ courses." },
+    { year: "2026", title: "What's next", desc: "AI-powered learning paths, live cohort courses, and enterprise plans launching soon." },
+  ];
+
+  return (
+    <div style={{ paddingTop: 68 }}>
+      {/* Hero */}
+      <section style={{ background: "linear-gradient(160deg,#0f0c29,#1a1048)", padding: "90px 28px", textAlign: "center", position: "relative", overflow: "hidden" }}>
+        <div style={{ position: "absolute", top: "20%", left: "10%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle,rgba(108,99,255,0.2) 0%,transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "10%", right: "10%", width: 250, height: 250, borderRadius: "50%", background: "radial-gradient(circle,rgba(255,209,102,0.1) 0%,transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "relative", maxWidth: 700, margin: "0 auto" }}>
+          <div style={{ display: "inline-block", padding: "6px 18px", borderRadius: 100, background: "rgba(108,99,255,0.2)", color: "#a5b4fc", fontSize: 13, fontWeight: 700, marginBottom: 24 }}>OUR STORY</div>
+          <h1 style={{ fontSize: "clamp(36px,5vw,60px)", fontWeight: 800, color: "#fff", letterSpacing: "-2px", lineHeight: 1.15, marginBottom: 24 }}>
+            We exist to make great<br />
+            <span style={{ background: "linear-gradient(135deg,#6C63FF,#a78bfa,#FFD166)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>learning accessible.</span>
+          </h1>
+          <p style={{ color: "#94a3b8", fontSize: 18, lineHeight: 1.8, maxWidth: 560, margin: "0 auto 40px" }}>
+            LearnHub was built on one belief: the quality of your education shouldn't depend on where you were born or how much money you have.
+          </p>
+          <div style={{ display: "flex", gap: 14, justifyContent: "center", flexWrap: "wrap" }}>
+            <button onClick={() => navigate("/courses")} style={{ padding: "14px 32px", borderRadius: 12, background: "linear-gradient(135deg,#6C63FF,#4f46e5)", color: "#fff", border: "none", fontSize: 15, fontWeight: 700, cursor: "pointer", boxShadow: "0 4px 20px rgba(108,99,255,0.4)" }}>Browse Courses</button>
+            <button onClick={() => navigate("/register")} style={{ padding: "14px 32px", borderRadius: 12, background: "rgba(255,255,255,0.08)", color: "#fff", border: "1.5px solid rgba(255,255,255,0.2)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>Join Free</button>
+          </div>
+        </div>
+      </section>
+
+      {/* Mission */}
+      <section style={{ padding: "90px 28px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))", gap: 24 }}>
+          {[
+            { icon: "🎯", title: "Our Mission", text: "To break down the barriers between ambitious learners and the skills they need to build the life they want. Every course on LearnHub is hand-reviewed for quality." },
+            { icon: "🌍", title: "Global Reach", text: "Our 48,000+ students come from 120+ countries. We offer scholarships and reduced pricing for learners in developing regions through our Access Program." },
+            { icon: "🏆", title: "Quality First", text: "Less than 30% of instructor applications are accepted. Every course goes through a 12-point review checklist before it reaches students." },
+          ].map(item => (
+            <div key={item.title} style={{ background: "#fff", borderRadius: 20, padding: "36px 32px", boxShadow: "0 4px 24px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8" }}>
+              <div style={{ fontSize: 40, marginBottom: 20 }}>{item.icon}</div>
+              <h3 style={{ fontSize: 20, fontWeight: 700, color: "#1a1a2e", marginBottom: 14 }}>{item.title}</h3>
+              <p style={{ color: "#64748b", fontSize: 15, lineHeight: 1.8 }}>{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Stats */}
+      <section style={{ background: "linear-gradient(135deg,#6C63FF,#4f46e5)", padding: "70px 28px" }}>
+        <div style={{ maxWidth: 1000, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: 0 }}>
+          {[["48K+","Students worldwide"],["120+","Countries"],["12K+","Courses"],["1.2K+","Instructors"],["94%","Completion rate"]].map(([num, lbl], i, arr) => (
+            <div key={lbl} style={{ textAlign: "center", padding: "32px 20px", borderRight: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.15)" : "none" }}>
+              <div style={{ fontSize: 38, fontWeight: 800, color: "#fff", letterSpacing: "-1px" }}>{num}</div>
+              <div style={{ fontSize: 14, color: "rgba(255,255,255,0.65)", marginTop: 6, fontWeight: 500 }}>{lbl}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Team */}
+      <section style={{ padding: "90px 28px", maxWidth: 1100, margin: "0 auto" }}>
+        <div style={{ textAlign: "center", marginBottom: 56 }}>
+          <div style={{ display: "inline-block", padding: "6px 18px", borderRadius: 100, background: "#f0efff", color: "#6C63FF", fontSize: 13, fontWeight: 700, marginBottom: 16 }}>THE TEAM</div>
+          <h2 style={{ fontSize: "clamp(28px,4vw,44px)", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-1px" }}>The people behind LearnHub</h2>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(240px,1fr))", gap: 24 }}>
+          {team.map(p => (
+            <div key={p.name} style={{ background: "#fff", borderRadius: 20, overflow: "hidden", boxShadow: "0 4px 24px rgba(0,0,0,0.06)", border: "1px solid #f0f4f8", transition: "transform 0.2s, box-shadow 0.2s" }}
+              onMouseEnter={e => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 16px 40px rgba(108,99,255,0.12)"; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = "none"; e.currentTarget.style.boxShadow = "0 4px 24px rgba(0,0,0,0.06)"; }}>
+              <div style={{ height: 120, background: p.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 52 }}>{p.emoji}</div>
+              <div style={{ padding: "24px" }}>
+                <div style={{ fontWeight: 800, color: "#1a1a2e", fontSize: 17, marginBottom: 4 }}>{p.name}</div>
+                <div style={{ color: "#6C63FF", fontSize: 13, fontWeight: 600, marginBottom: 12 }}>{p.role}</div>
+                <p style={{ color: "#64748b", fontSize: 14, lineHeight: 1.7 }}>{p.bio}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section style={{ background: "#f8f9fe", padding: "90px 28px" }}>
+        <div style={{ maxWidth: 800, margin: "0 auto" }}>
+          <div style={{ textAlign: "center", marginBottom: 60 }}>
+            <div style={{ display: "inline-block", padding: "6px 18px", borderRadius: 100, background: "#f0efff", color: "#6C63FF", fontSize: 13, fontWeight: 700, marginBottom: 16 }}>OUR JOURNEY</div>
+            <h2 style={{ fontSize: "clamp(26px,4vw,40px)", fontWeight: 800, color: "#1a1a2e", letterSpacing: "-1px" }}>How we got here</h2>
+          </div>
+          <div style={{ position: "relative" }}>
+            <div style={{ position: "absolute", left: 71, top: 0, bottom: 0, width: 2, background: "linear-gradient(to bottom,#6C63FF,#e2e8f0)", zIndex: 0 }} />
+            <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
+              {milestones.map((m, i) => (
+                <div key={i} style={{ display: "flex", gap: 28, alignItems: "flex-start", paddingBottom: i < milestones.length - 1 ? 36 : 0, position: "relative" }}>
+                  <div style={{ width: 144, textAlign: "right", paddingTop: 4, flexShrink: 0 }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "#6C63FF", background: "#f0efff", padding: "4px 12px", borderRadius: 100 }}>{m.year}</span>
+                  </div>
+                  <div style={{ width: 16, height: 16, borderRadius: "50%", background: i === milestones.length - 1 ? "#FFD166" : "#6C63FF", border: "3px solid #fff", boxShadow: "0 0 0 3px rgba(108,99,255,0.2)", flexShrink: 0, marginTop: 4, position: "relative", zIndex: 1 }} />
+                  <div style={{ flex: 1, paddingBottom: 8 }}>
+                    <div style={{ fontWeight: 700, color: "#1a1a2e", fontSize: 16, marginBottom: 6 }}>{m.title}</div>
+                    <div style={{ color: "#64748b", fontSize: 14, lineHeight: 1.7 }}>{m.desc}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section style={{ background: "linear-gradient(135deg,#0f0c29,#1a1048)", padding: "80px 28px", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+          <h2 style={{ fontSize: "clamp(26px,4vw,44px)", fontWeight: 800, color: "#fff", marginBottom: 16, letterSpacing: "-1px" }}>Ready to be part of the story?</h2>
+          <p style={{ color: "#64748b", fontSize: 16, marginBottom: 36, lineHeight: 1.7 }}>Join 48,000+ learners already building skills that matter.</p>
+          <button onClick={() => navigate("/register")} style={{ padding: "16px 44px", borderRadius: 12, background: "linear-gradient(135deg,#6C63FF,#4f46e5)", color: "#fff", border: "none", fontSize: 16, fontWeight: 700, cursor: "pointer", boxShadow: "0 8px 24px rgba(108,99,255,0.4)" }}>Get Started Free →</button>
+        </div>
+      </section>
+
+      <PageFooter navigate={navigate} />
+    </div>
+  );
+}
+
+export default AboutPage;
